@@ -1,0 +1,136 @@
+---
+title: 'Intro'
+---
+
+<script>
+  let jobs = []
+  let selectedJob = null
+
+  async function getJobs() {
+    try {
+      const response = await fetch('http://localhost:3001/api/infojobs')
+      const data = await response.json()
+      jobs = data.offers
+      const jobOfferSelect = document.getElementById('job-offer')
+      jobOfferSelect.innerHTML = jobs
+        .map(job => `<option value='${job.id}'>${job.title}</option>`)
+        .join('')
+    } catch (error) {
+      console.error('Error:', error)
+    }
+  }
+
+  getJobs()
+</script>
+
+<section
+  class='bg-GrayL3 px-12 py-8 sm:px-6 h-screen flex justify-center items-center'
+>
+  <div class='max-w-3xl mx-auto'>
+    <h2 class='text-3xl font-extrabold sm:text-5xl mb-4'>
+      Welcome to AI Interview <strong class='font-extrabold text-primary'
+        >Odyssey!</strong
+      >
+    </h2>
+
+    <p class='text-gray-600 mb-4'>
+      In this simulation, you will experience an unconventional job interview.
+      Our AI interviewers have unique personalities and will ask you a series of
+      questions. Your goal is to answer the questions to the best of your
+      ability and have fun with the extravagant responses from our AI
+      interviewers.
+    </p>
+
+    <form action='/interview' method='GET' class='mt-8'>
+      <h3 class='font-medium text-xl'>Select an Interviewer:</h3>
+      <div class='grid grid-cols-1 gap-4 text-center sm:grid-cols-3 mb-4'>
+        <div>
+          <input
+            class='peer sr-only'
+            id='option1'
+            type='radio'
+            tabindex='-1'
+            name='option'
+          />
+
+          <label
+            for='option1'
+            class='block w-full rounded-lg border border-gray-300 p-3 hover:border-primary peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white'
+            tabindex='0'
+          >
+            <span class='text-sm font-medium'>Dr. Jokester</span>
+          </label>
+        </div>
+
+        <div>
+          <input
+            class='peer sr-only'
+            id='option2'
+            type='radio'
+            tabindex='-1'
+            name='option'
+          />
+
+          <label
+            for='option2'
+            class='block w-full rounded-lg border border-gray-300 p-3 hover:border-primary peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white'
+            tabindex='0'
+          >
+            <span class='text-sm font-medium'>Madame Eccentric</span>
+          </label>
+        </div>
+
+        <div>
+          <input
+            class='peer sr-only'
+            id='option3'
+            type='radio'
+            tabindex='-1'
+            name='option'
+          />
+
+          <label
+            for='option3'
+            class='block w-full rounded-lg border border-gray-300 p-3 hover:border-primary peer-checked:border-secondary peer-checked:bg-secondary peer-checked:text-white'
+            tabindex='0'
+          >
+            <span class='text-sm font-medium'>Captain Quirk</span>
+          </label>
+        </div>
+      </div>
+
+      <div class='mb-4'>
+        <label class='font-medium text-xl' for='interview-type'
+          >Select Interview Type:</label
+        >
+        <select
+          name='interview-type'
+          id='interview-type'
+          class='block mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm'
+        >
+          <option value='technical'>Technical Interview</option>
+          <option value='behavioral'>Behavioral Interview</option>
+          <option value='case'>Case Study Interview</option>
+        </select>
+      </div>
+
+      <div class='mb-4'>
+        <label class='font-medium text-xl' for='job-offer'>Job Offer:</label>
+        <select
+          name='job-offer'
+          id='job-offer'
+          class='block mt-1 w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm'
+        >
+          <option value='' disabled selected>Select a Job Offer</option>
+        </select>
+      </div>
+
+      <button
+        type='submit'
+        class='block w-full rounded-lg bg-primary px-12 py-3 text-sm font-medium text-white shadow hover:bg-secondary focus:outline-none focus:ring active:bg-rose-500 sm:w-auto'
+      >
+        Start the Interview
+      </button>
+    </form>
+  </div>
+</section>
