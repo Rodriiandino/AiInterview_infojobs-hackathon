@@ -1,33 +1,13 @@
 ---
 title: 'Intro'
+import { JobOffer } from '../components/jobOffer'
 ---
 
-<script>
-  let jobs = []
-  let selectedJob = null
-
-  async function getJobs() {
-    try {
-      const response = await fetch('http://localhost:3001/api/infojobs')
-      const data = await response.json()
-      jobs = data.offers
-      const jobOfferSelect = document.getElementById('job-offer')
-      jobOfferSelect.innerHTML = jobs
-        .map(job => `<option value='${job.id}'>${job.title}</option>`)
-        .join('')
-    } catch (error) {
-      console.error('Error:', error)
-    }
-  }
-
-  getJobs()
-</script>
-
 <section
-  class='bg-GrayL3 px-12 py-8 sm:px-6 h-screen flex justify-center items-center'
+  class='bg-GrayL3 px-9 py-8 sm:px-6 flex flex-col h-screen max-sm:h-full'
 >
   <div class='max-w-3xl mx-auto'>
-    <h2 class='text-3xl font-extrabold sm:text-5xl mb-4'>
+    <h2 class='text-3xl font-extrabold sm:text-4xl mb-4'>
       Welcome to AI Interview <strong class='font-extrabold text-primary'
         >Odyssey!</strong
       >
@@ -99,30 +79,31 @@ title: 'Intro'
         </div>
       </div>
 
-      <div class='mb-4'>
-        <label class='font-medium text-xl' for='interview-type'
-          >Select Interview Type:</label
-        >
-        <select
-          name='interview-type'
-          id='interview-type'
-          class='block mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm'
-        >
-          <option value='technical'>Technical Interview</option>
-          <option value='behavioral'>Behavioral Interview</option>
-          <option value='case'>Case Study Interview</option>
-        </select>
-      </div>
+      <div class='flex gap-6 justify-around max-sm:flex-col'>
+        <div class='mb-4 w-1/2 max-sm:w-full'>
+          <label class='font-medium text-xl' for='interview-type'
+            >Select Interview Type:</label
+          >
+          <select
+            name='interview-type'
+            id='interview-type'
+            class='block w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm'
+          >
+            <option value='technical'>Technical Interview</option>
+            <option value='behavioral'>Behavioral Interview</option>
+            <option value='case'>Case Study Interview</option>
+          </select>
+        </div>
 
-      <div class='mb-4'>
-        <label class='font-medium text-xl' for='job-offer'>Job Offer:</label>
-        <select
-          name='job-offer'
-          id='job-offer'
-          class='block mt-1 w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm'
-        >
-          <option value='' disabled selected>Select a Job Offer</option>
-        </select>
+        <div class='mb-4 w-1/2 max-sm:w-full'>
+          <label class='font-medium text-xl' for='id-jobs'>ID job Offer</label>
+          <input
+            type='text'
+            name='id-jobs'
+            class='block w-full mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm'
+            placeholder='282f50dec44d1ca...'
+          />
+        </div>
       </div>
 
       <button
@@ -132,5 +113,9 @@ title: 'Intro'
         Start the Interview
       </button>
     </form>
+  </div>
+
+  <div class='max-w-3xl mx-auto mt-4 overflow-y-auto'>
+    <JobOffer client:load />
   </div>
 </section>

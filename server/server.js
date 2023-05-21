@@ -17,13 +17,17 @@ app.get('/api/infojobs', async (req, res) => {
 
   try {
     const authHeader = `Basic ${btoa(`${clientId}:${clientSecret}`)}`
+    const page = req.query.page || 1
 
-    const response = await axios.get('https://api.infojobs.net/api/1/offer', {
-      headers: {
-        Authorization: authHeader
-      },
-      params: req.query
-    })
+    const response = await axios.get(
+      `https://api.infojobs.net/api/1/offer?page=${page}`,
+      {
+        headers: {
+          Authorization: authHeader
+        },
+        params: req.query
+      }
+    )
 
     res.json(response.data)
   } catch (error) {
