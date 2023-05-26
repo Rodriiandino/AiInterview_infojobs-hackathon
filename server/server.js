@@ -1,14 +1,17 @@
 const express = require('express')
 const axios = require('axios')
 const btoa = require('btoa')
+const cors = require('cors')
+const bodyParser = require('body-parser')
 
 const app = express()
+app.use(bodyParser.json())
 
-// Middleware para habilitar CORS
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
-  next()
-})
+app.use(
+  cors({
+    origin: 'http://localhost:3000'
+  })
+)
 
 const clientId = '' // Reemplaza con tu ID de cliente de InfoJobs
 const clientSecret = '' // Reemplaza con tu clave secreta de InfoJobs
@@ -29,6 +32,40 @@ app.get('/api/infojobs', async (req, res) => {
     )
 
     res.json(response.data)
+  } catch (error) {
+    console.error('Error:', error)
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+})
+
+app.post('/api/job', async (req, res) => {
+  const jobId = req.body.jobId
+  const interviewType = req.body.interviewType
+  const interviewer = req.body.interviewer
+
+  const jobData = {
+    jobId: jobId,
+    interviewType: interviewType,
+    interviewer: interviewer
+  }
+
+  try {
+    const response = await axios.get(
+      `https://api.infojobs.net/api/1/offer/${jobId}`,
+      {
+        headers: {
+          Authorization: authHeader
+        }
+      }
+    )
+
+    jobData.title = response.data.title
+    jobData.requirements = response.data.minRequirements
+    jobData.description = response.data.description
+
+    console.log(jobData)
+
+    res.json(jobData)
   } catch (error) {
     console.error('Error:', error)
     res.status(500).json({ error: 'Internal Server Error' })
