@@ -39,7 +39,7 @@ export function JobOffer() {
   return (
     <>
       <header className='sticky top-0 bg-GrayL3'>
-        <h3 class='font-medium text-xl'>Job Offer:</h3>
+        <h3 className='font-medium text-xl'>Job Offer:</h3>
         <div className='flex justify-center space-x-4 p-4'>
           <button
             className='w-24 py-2  bg-primary text-white rounded-lg hover:bg-blue-600 focus:outline-none'

@@ -10,8 +10,8 @@ app.use((req, res, next) => {
   next()
 })
 
-const clientId = 'cea4dfeb80444395b4dc2a564f47073f' // Reemplaza con tu ID de cliente de InfoJobs
-const clientSecret = 'DCwQlP+3k3oYaS3hb0YLtuTY6q2MplZ1a3GOALTAQ4GqAkP3L4' // Reemplaza con tu clave secreta de InfoJobs
+const clientId = '' // Reemplaza con tu ID de cliente de InfoJobs
+const clientSecret = '' // Reemplaza con tu clave secreta de InfoJobs
 const authHeader = `Basic ${btoa(`${clientId}:${clientSecret}`)}`
 
 // Ruta para pasar las solicitudes a la API de InfoJobs
@@ -50,9 +50,9 @@ app.get('/api/job/:id', async (req, res) => {
     )
 
     const jobData = {
-      title: response.data.title, // Reemplaza con la propiedad correcta para obtener el título
-      requirements: response.data.minRequirements, // Reemplaza con la propiedad correcta para obtener los requerimientos
-      description: response.data.description // Reemplaza con la propiedad correcta para obtener la descripción
+      title: response.data.title,
+      requirements: response.data.minRequirements,
+      description: response.data.description
     }
 
     res.json(jobData)
