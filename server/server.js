@@ -15,8 +15,8 @@ app.use(
   })
 )
 
-const clientId = process.env.INFOJOB_CLIENT_KEY // Reemplaza con tu ID de cliente de InfoJobs
-const clientSecret = process.env.INFOJOB_SECRET_KEY // Reemplaza con tu clave secreta de InfoJobs
+const clientId = process.env.INFOJOB_CLIENT_KEY // ID de cliente de InfoJobs
+const clientSecret = process.env.INFOJOB_SECRET_KEY // Clave secreta de InfoJobs
 const authHeader = `Basic ${btoa(`${clientId}:${clientSecret}`)}`
 
 const configuration = new Configuration({
@@ -27,9 +27,6 @@ const openai = new OpenAIApi(configuration)
 // Función para generar preguntas y respuestas
 const generateQuestions = async ({ interviewType, interviewer, jobData }) => {
   try {
-    // Lógica para generar las preguntas y respuestas usando OpenAI
-    // Aquí debes usar los datos obtenidos del formulario (tipo de trabajo, actuación del entrevistador, tipo de entrevista, etc.)
-
     const response = await openai.createCompletion({
       model: 'text-davinci-003',
       prompt: `Vas a ser un entrevistador, tu función es realizar una entrevista del tipo [${interviewType}]. La cual tu personalidad debe alinearse con las características de este entrevistador [[[${interviewer}]]].
@@ -76,11 +73,11 @@ const generateQuestions = async ({ interviewType, interviewer, jobData }) => {
     }
   } catch (error) {
     console.error('Error generating questions:', error)
-    // Manejo de errores, si es necesario
+    // Manejo de errores
   }
 }
 
-// Ruta para pasar las solicitudes a la API de InfoJobs
+// Ruta para pasar las solicitudes de ofertas de trabajo de InfoJobs
 app.get('/api/infojobs', async (req, res) => {
   try {
     const page = req.query.page || 1
@@ -149,7 +146,7 @@ app.post('/api/job', async (req, res) => {
   }
 })
 
-// Ruta para obtener los requerimientos y la descripción de una oferta de trabajo por su ID
+// Ruta para obtener de los datos de una oferta de trabajo de InfoJobs
 app.get('/api/job/:id', async (req, res) => {
   const jobId = req.params.id
 
@@ -176,7 +173,6 @@ app.get('/api/job/:id', async (req, res) => {
   }
 })
 
-// Inicia el servidor en el puerto 3001
 app.listen(3001, () => {
   console.log('Servidor iniciado en http://localhost:3001')
 })
