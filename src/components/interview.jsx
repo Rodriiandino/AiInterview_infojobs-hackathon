@@ -13,6 +13,7 @@ export default function Interview() {
     submitted,
     loading,
     answerIsSelected,
+    correctAnswer,
     handleAnswerSelection,
     handleSubmit,
     handleNewQuestion
@@ -76,6 +77,13 @@ export default function Interview() {
                     <h3 className='font-bold mb-2 text-xl text-primary'>
                       Respuesta seleccionada:{' '}
                       <span className='text-secondary'>{answerStatus}</span>
+                    </h3>
+                  )}
+
+                  {correctAnswer && (
+                    <h3 className='font-bold mb-2 text-xl text-primary'>
+                      Respuesta correcta:{' '}
+                      <span className='text-secondary'>{correctAnswer}</span>
                     </h3>
                   )}
 

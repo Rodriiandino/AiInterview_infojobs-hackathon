@@ -9,6 +9,7 @@ export default function useInterviewData() {
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [answerIsSelected, setAnswerIsSelected] = useState(false)
   const [answerStatus, setAnswerStatus] = useState(null)
+  const [correctAnswer, setCorrectAnswer] = useState(null)
   const [explanation, setExplanation] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -68,11 +69,20 @@ export default function useInterviewData() {
         .map(answer => answer.trim())
         .filter(answer => answer !== '')
 
+      const answerCorrect = completions
+        .substring(answersEndIndex, explanationIndex)
+        .replace('Respuesta correcta:', '')
+        .replace('$', '')
+        .trim()
+
+      console.log(answerCorrect)
+
       const explanationText = completions
         .substring(explanationIndex)
         .replace('Explicación:', '')
         .trim()
 
+      setCorrectAnswer(answerCorrect)
       setExplanation(explanationText)
       setQuestion(questionText)
       setAnswers(answersText)
@@ -121,6 +131,7 @@ export default function useInterviewData() {
     submitted,
     loading,
     answerIsSelected,
+    correctAnswer,
     handleAnswerSelection,
     handleSubmit,
     handleNewQuestion
