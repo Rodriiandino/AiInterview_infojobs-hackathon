@@ -92,15 +92,19 @@ export default function Interview() {
                 <button
                   className='bg-primary text-white px-4 py-2 rounded-lg mr-2 hover:bg-secondary'
                   onClick={() => handleSubmit()}
+                  disabled={loading}
                 >
                   Responder
                 </button>
-                <button
-                  className='bg-primary text-white px-4 py-2 rounded-lg mr-2 hover:bg-secondary'
-                  onClick={() => handleNewQuestion()}
-                >
-                  Generar nueva pregunta
-                </button>
+                {submitted && (
+                  <button
+                    className='bg-primary text-white px-4 py-2 rounded-lg mr-2 hover:bg-secondary'
+                    onClick={() => handleNewQuestion()}
+                    disabled={loading}
+                  >
+                    Generar nueva pregunta
+                  </button>
+                )}
               </div>
             </div>
           </main>
