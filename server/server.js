@@ -29,9 +29,12 @@ const generateQuestions = async ({ interviewType, interviewer, jobData }) => {
   try {
     const response = await openai.createCompletion({
       model: 'text-davinci-003',
-      prompt: `Vas a ser un entrevistador, tu función es realizar una entrevista del tipo [${interviewType}]. La cual tu personalidad debe alinearse con las características de este entrevistador [[[${interviewer}]]].
+      prompt: `Vas a ser un entrevistador, tu función es realizar una entrevista del tipo ${interviewType}. La cual tu personalidad debe alinearse con las características de este entrevistador ${interviewer}.
     
-      Para esta entrevista, nos centraremos en los requisitos del puesto y los datos laborales proporcionados. El trabajo implica las siguientes características: [[${jobData}]]
+      Para esta entrevista, nos centraremos en los requisitos del puesto y los datos laborales proporcionados. El trabajo implica las siguientes características: 
+      
+      titulo de la oferta de trabajo: ${jobData.title},
+      requisitos mínimos: ${jobData.requirements}.
       
       Tu tarea es generar una pregunta y cuatro respuestas posibles, con solo una respuesta correcta.
 
@@ -41,10 +44,10 @@ const generateQuestions = async ({ interviewType, interviewer, jobData }) => {
 
       Respuestas:
       
-      HTML 
-      Python 
-      JavaScript  
-      Hibernate $ 
+      RESPUESTAS POSIBLES 
+      RESPUESTAS POSIBLES
+      RESPUESTAS POSIBLES $  
+      RESPUESTAS POSIBLES 
 
       Respuesta correcta: LA RESPUESTA QUE ES CORRECTA.
 
@@ -56,14 +59,9 @@ const generateQuestions = async ({ interviewType, interviewer, jobData }) => {
 
       2. Usar el formato de pregunta y respuesta de arriba.
       
-      3. La respuesta correcta debe terminar con el símbolo de dolar ($).
-      
-      "La frase que está rodeada por un corchete es el tipo de entrevista, la frase que está rodeada por dos corchetes son los datos del trabajo y la frase que está rodeada por tres corchetes es el entrevistador".
-      Estos son los datos para la entrevista:
-      
-      [${interviewType}] [[[${interviewer}]]] [[${jobData}]]`,
-      temperature: 0.7,
-      max_tokens: 350,
+      3. La respuesta correcta debe terminar con el símbolo de dolar ($).`,
+      temperature: 0.5,
+      max_tokens: 500,
       top_p: 1
     })
 
