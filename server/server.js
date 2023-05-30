@@ -7,18 +7,17 @@ const { Configuration, OpenAIApi } = require('openai')
 require('dotenv').config()
 
 const app = express()
+const port = process.env.PORT || 3000
 app.use(bodyParser.json())
 
-app.use(
-  cors({
-    origin: 'http://localhost:3000'
-  })
-)
+app.use(cors())
 
+// Configuración de InfoJobs
 const clientId = process.env.INFOJOB_CLIENT_KEY // ID de cliente de InfoJobs
 const clientSecret = process.env.INFOJOB_SECRET_KEY // Clave secreta de InfoJobs
 const authHeader = `Basic ${btoa(`${clientId}:${clientSecret}`)}`
 
+// Configuración de OpenAI
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY
 })
@@ -186,6 +185,6 @@ app.get('/api/job/:id', async (req, res) => {
   }
 })
 
-app.listen(3001, () => {
-  console.log('Servidor iniciado en http://localhost:3001')
+app.listen(port, () => {
+  console.log(`Servidor iniciado en ${port}`)
 })
