@@ -131,25 +131,25 @@ app.post('/api/job', async (req, res) => {
 
     // Generar preguntas y respuestas
 
-    // const completions = await generateQuestions({
-    //   interviewType,
-    //   interviewer,
-    //   jobData
-    // })
+    const completions = await generateQuestions({
+      interviewType,
+      interviewer,
+      jobData
+    })
 
-    const completions = `
-    Pregunta: ¿Qué lenguaje de programación es el más usado para desarrollar aplicaciones de internet?
+    // const completions = `
+    // Pregunta: ¿Qué lenguaje de programación es el más usado para desarrollar aplicaciones de internet?
 
-    Respuestas:
-    Java
-    C
-    JavaScript $
-    PHP
+    // Respuestas:
+    // Java
+    // C
+    // JavaScript $
+    // PHP
 
-    Respuesta correcta: JavaScript $
+    // Respuesta correcta: JavaScript $
 
-    Explicación: JavaScript es un lenguaje de programación de alto nivel, orientado a objetos, que se ha convertido en el lenguaje más usado para desarrollar aplicaciones de internet.
-    `
+    // Explicación: JavaScript es un lenguaje de programación de alto nivel, orientado a objetos, que se ha convertido en el lenguaje más usado para desarrollar aplicaciones de internet.
+    // `
 
     // Enviar preguntas y respuestas junto con los datos de la oferta de trabajo
     res.json({ jobData, completions })
