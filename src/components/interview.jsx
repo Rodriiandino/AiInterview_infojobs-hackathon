@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { assignPersonality, assignCharacteristics } from './assignType'
 import { Logo } from './logo'
 
 export default function Interview() {
@@ -10,15 +11,21 @@ export default function Interview() {
   const [selectedAnswer, setSelectedAnswer] = useState(null)
   const [answerStatus, setAnswerStatus] = useState(null)
   const [explanation, setExplanation] = useState('')
+  const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
         // Datos del formulario en Intro.astro
         const urlParams = new URLSearchParams(window.location.search)
         const selectedInterviewType = urlParams.get('interview-type')
         const selectedInterviewer = urlParams.get('option')
         const jobId = urlParams.get('id-jobs')
+
+        const personality = assignPersonality(selectedInterviewer)
+        const characteristics = assignCharacteristics(selectedInterviewType)
 
         setInterviewType(selectedInterviewType)
         setInterviewer(selectedInterviewer)
@@ -29,8 +36,8 @@ export default function Interview() {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            interviewType: selectedInterviewType,
-            interviewer: selectedInterviewer,
+            interviewType: characteristics,
+            interviewer: personality,
             jobId
           })
         })
@@ -65,13 +72,10 @@ export default function Interview() {
               .replace('Explicación:', '')
               .trim()
 
-            console.log(completions)
-            console.log(questionText)
-            console.log(answersText)
-
             setExplanation(explanationText)
             setQuestion(questionText)
             setAnswers(answersText)
+            setLoading(false)
           })
           .catch(error => console.error(error))
       } catch (error) {
@@ -84,8 +88,11 @@ export default function Interview() {
 
   const handleAnswerSelection = index => {
     setSelectedAnswer(index)
+  }
 
-    if (answers[index].endsWith('$')) {
+  const handleSubmit = () => {
+    setSubmitted(true)
+    if (answers[selectedAnswer].endsWith('$')) {
       setAnswerStatus('Correcto')
     } else {
       setAnswerStatus('Incorrecto')
@@ -94,21 +101,23 @@ export default function Interview() {
 
   return (
     <>
-      <div className='bg-GrayL3 min-h-screen py-8 px-4'>
+      <div className='bg-GrayL3 min-h-screen py-8 px-4 max-sm:px-0 max-sm:pt-0  max-sm:pb-12'>
         <div className='max-w-screen-xl mx-auto bg-white shadow rounded-lg p-6'>
           <header className='flex items-end gap-3 mb-4'>
             <Logo />
-            <h1 className='text-3xl font-bold mb-2 text-GrayL2'>Interview</h1>
+            <h1 className='text-3xl font-bold mb-2 text-GrayL2'>Entrevista</h1>
           </header>
-
+          {loading ? (
+            <p className='text-center font-bold text-lg'>Cargando...</p>
+          ) : null}
           <main className=''>
             <section mb-4>
               <h3 className='mb-2 text-primary font-bold text-lg'>
-                Interview type:{' '}
+                Tipo de Entrevista:{' '}
                 <span className='text-GrayD4 font-medium'>{interviewType}</span>{' '}
               </h3>
               <h3 className='mb-2 text-primary font-bold text-lg'>
-                Interviewer:{' '}
+                Entrevistador:{' '}
                 <span className='text-GrayD4 font-medium'> {interviewer}</span>
               </h3>
             </section>
@@ -139,33 +148,37 @@ export default function Interview() {
                 ))}
               </ul>
             </section>
-          </main>
+            <div>
+              {submitted && (
+                <div>
+                  {answerStatus && (
+                    <h3 className='font-bold mb-2 text-xl text-primary'>
+                      Respuesta seleccionada:{' '}
+                      <span className='text-secondary'>{answerStatus}</span>
+                    </h3>
+                  )}
 
-          <footer>
-            {answerStatus && (
-              <p className='text-primary mb-4'>
-                Respuesta seleccionada: {answerStatus}
-              </p>
-            )}
+                  {explanation && (
+                    <section className='mb-4'>
+                      <h3 className='font-bold mb-2 text-xl text-primary'>
+                        Explicación
+                      </h3>
+                      <p className='text-GrayD4'>{explanation}</p>
+                    </section>
+                  )}
+                </div>
+              )}
 
-            {explanation && (
-              <section className='mb-4'>
-                <h3 className='font-bold mb-2 text-xl text-primary'>
-                  Explicación
-                </h3>
-                <p className='text-GrayD4'>{explanation}</p>
-              </section>
-            )}
-
-            <div className='flex justify-center'>
-              <button className='bg-primary text-white px-4 py-2 rounded mr-2'>
-                Submit
-              </button>
-              <button className='bg-secondary text-white px-4 py-2 rounded'>
-                Cancel
-              </button>
+              <div className='flex justify-center'>
+                <button
+                  className='bg-primary text-white px-4 py-2 rounded-lg mr-2'
+                  onClick={() => handleSubmit()}
+                >
+                  Responder
+                </button>
+              </div>
             </div>
-          </footer>
+          </main>
         </div>
       </div>
     </>

@@ -5,26 +5,36 @@ export function JobOffer() {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const [loading, setLoading] = useState(false)
+  const [category, setCategory] = useState('')
+  const [keyword, setKeyword] = useState('')
 
   const fetchJobs = useCallback(async () => {
     try {
       setLoading(true)
-      const response = await fetch(
-        `http://localhost:3001/api/infojobs?page=${page}`
-      )
+
+      let apiUrl = `http://localhost:3001/api/infojobs?page=${page}`
+      if (category) {
+        apiUrl += `&category=${encodeURIComponent(category)}`
+      }
+      if (keyword) {
+        apiUrl += `&keyword=${encodeURIComponent(keyword)}`
+      }
+
+      const response = await fetch(apiUrl)
       const data = await response.json()
       const { offers } = data
+
       setLoading(false)
       setJobs(offers)
       setTotalPages(data.totalPages)
     } catch (error) {
       console.error('Error:', error)
     }
-  }, [page])
+  }, [page, category, keyword])
 
   useEffect(() => {
     fetchJobs()
-  }, [page])
+  }, [page, category, keyword])
 
   const nextPage = () => {
     if (page === totalPages) return
@@ -36,30 +46,58 @@ export function JobOffer() {
     setPage(page - 1)
   }
 
+  const handleCategoryChange = e => {
+    setCategory(e.target.value)
+  }
+
+  const handleKeywordChange = e => {
+    setKeyword(e.target.value)
+  }
+
   return (
     <>
       <header className='sticky top-0 bg-GrayL3'>
         <h3 className='font-medium text-xl'>Job Offer:</h3>
         <div className='flex justify-center space-x-4 p-4'>
           <button
-            className='w-24 py-2  bg-primary text-white rounded-lg hover:bg-blue-600 focus:outline-none'
+            className='w-24 py-2 bg-primary text-white rounded-lg hover:bg-secondary focus:outline-none'
             onClick={prevPage}
             disabled={page === 1}
           >
-            Previous
+            Anterior
           </button>
           <p className='font-medium text-xl'>
             {page} / {totalPages}
           </p>
           <button
-            className='w-24 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 focus:outline-none'
+            className='w-24 py-2 bg-primary text-white rounded-lg hover:bg-secondary focus:outline-none'
             onClick={nextPage}
           >
-            Next
+            Siguiente
           </button>
         </div>
+        <div className='p-1 flex justify-center gap-2 max-md:flex-col'>
+          <select
+            value={category}
+            onChange={handleCategoryChange}
+            className='px-2 py-1 border border-gray-300 rounded'
+          >
+            <option value=''>Todas las categorías</option>
+            <option value='informatica-telecomunicaciones'>
+              Informática y Telecomunicaciones
+            </option>
+            {/* Agrega aquí las demás opciones de categoría */}
+          </select>
+          <input
+            type='text'
+            placeholder='Palabra clave'
+            value={keyword}
+            onChange={handleKeywordChange}
+            className='px-2 py-1 border border-gray-300 rounded'
+          />
+        </div>
       </header>
-      {loading ? <p>Loading...</p> : null}
+      {loading ? <p>Cargando...</p> : null}
       <ul className='grid'>
         {jobs.map(job => (
           <li className='pb-4' key={job.id}>

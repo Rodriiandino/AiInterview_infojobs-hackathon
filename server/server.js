@@ -85,15 +85,24 @@ const generateQuestions = async ({ interviewType, interviewer, jobData }) => {
 app.get('/api/infojobs', async (req, res) => {
   try {
     const page = req.query.page || 1
+    const category = req.query.category
+    const keyword = req.query.keyword
 
-    const response = await axios.get(
-      `https://api.infojobs.net/api/1/offer?page=${page}`,
-      {
-        headers: {
-          Authorization: authHeader
-        }
+    let apiUrl = `https://api.infojobs.net/api/1/offer?page=${page}`
+
+    if (category) {
+      apiUrl += `&category=${category}`
+    }
+
+    if (keyword) {
+      apiUrl += `&q=${keyword}`
+    }
+
+    const response = await axios.get(apiUrl, {
+      headers: {
+        Authorization: authHeader
       }
-    )
+    })
 
     res.json(response.data)
   } catch (error) {
@@ -133,11 +142,11 @@ app.post('/api/job', async (req, res) => {
     const completions = `
     Pregunta: ¿Qué lenguaje de programación es el más usado para desarrollar aplicaciones de internet?
 
-    Respuestas: 
-    Java 
-    C 
-    JavaScript $ 
-    PHP 
+    Respuestas:
+    Java
+    C
+    JavaScript $
+    PHP
 
     Respuesta correcta: JavaScript $
 
