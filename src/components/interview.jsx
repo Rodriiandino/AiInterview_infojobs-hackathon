@@ -90,13 +90,13 @@ export default function Interview() {
 
               <div className='flex justify-center'>
                 <button
-                  className='bg-primary text-white px-4 py-2 rounded-lg mr-2'
+                  className='bg-primary text-white px-4 py-2 rounded-lg mr-2 hover:bg-secondary'
                   onClick={() => handleSubmit()}
                 >
                   Responder
                 </button>
                 <button
-                  className='bg-primary text-white px-4 py-2 rounded-lg mr-2'
+                  className='bg-primary text-white px-4 py-2 rounded-lg mr-2 hover:bg-secondary'
                   onClick={() => handleNewQuestion()}
                 >
                   Generar nueva pregunta
