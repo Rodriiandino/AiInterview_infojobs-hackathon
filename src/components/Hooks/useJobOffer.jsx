@@ -12,7 +12,12 @@ export default function useJobOffer() {
     try {
       setLoading(true)
 
-      let apiUrl = `https://aiinterviewinfojobs-hackathon-production.up.railway.app/api/infojobs?page=${page}`
+      let apiUrl =
+        window.location.hostname === 'localhost' &&
+        window.location.port === '3001'
+          ? `http://localhost:3001/api/infojobs?page=${page}`
+          : `https://aiinterviewinfojobs-hackathon-production.up.railway.app/api/infojobs?page=${page}`
+
       if (category) {
         apiUrl += `&category=${encodeURIComponent(category)}`
       }

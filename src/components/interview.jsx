@@ -12,6 +12,7 @@ export default function Interview() {
     explanation,
     submitted,
     loading,
+    answerIsSelected,
     handleAnswerSelection,
     handleSubmit,
     handleNewQuestion
@@ -53,10 +54,11 @@ export default function Interview() {
                 {answers.map((answer, index) => (
                   <li key={index} className='mb-2'>
                     <button
-                      className={`w-full p-4 text-lg text-start hover:scale-105 ${
+                      className={`w-full p-4 text-lg text-start hover:scale-105 disabled:opacity-70 ${
                         selectedAnswer === index ? 'bg-primary text-white' : ''
                       }`}
                       onClick={() => handleAnswerSelection(index)}
+                      disabled={submitted}
                     >
                       {index + 1}.{' '}
                       {answer.endsWith('$') ? answer.replace('$', '') : answer}{' '}
@@ -90,15 +92,15 @@ export default function Interview() {
 
               <div className='flex justify-center'>
                 <button
-                  className='bg-primary text-white px-4 py-2 rounded-lg mr-2 hover:bg-secondary'
+                  className='bg-primary text-white px-4 py-2 rounded-lg mr-2 hover:bg-secondary disabled:opacity-50'
                   onClick={() => handleSubmit()}
-                  disabled={loading}
+                  disabled={loading || !answerIsSelected}
                 >
                   Responder
                 </button>
                 {submitted && (
                   <button
-                    className='bg-primary text-white px-4 py-2 rounded-lg mr-2 hover:bg-secondary'
+                    className='bg-primary text-white px-4 py-2 rounded-lg mr-2 hover:bg-secondary disabled:opacity-50'
                     onClick={() => handleNewQuestion()}
                     disabled={loading}
                   >

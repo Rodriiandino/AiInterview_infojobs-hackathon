@@ -7,6 +7,7 @@ export default function useInterviewData() {
   const [question, setQuestion] = useState('')
   const [answers, setAnswers] = useState([])
   const [selectedAnswer, setSelectedAnswer] = useState(null)
+  const [answerIsSelected, setAnswerIsSelected] = useState(false)
   const [answerStatus, setAnswerStatus] = useState(null)
   const [explanation, setExplanation] = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -27,20 +28,23 @@ export default function useInterviewData() {
       setInterviewType(characteristics)
       setInterviewer(selectedInterviewer)
 
-      const response = await fetch(
-        'https://aiinterviewinfojobs-hackathon-production.up.railway.app/api/job',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            interviewType: characteristics,
-            interviewer: personality,
-            jobId
-          })
-        }
-      )
+      const baseUrl =
+        window.location.hostname === 'localhost' &&
+        window.location.port === '3001'
+          ? 'http://localhost:3001/api/job'
+          : 'https://aiinterviewinfojobs-hackathon-production.up.railway.app/api/job'
+
+      const response = await fetch(baseUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          interviewType: characteristics,
+          interviewer: personality,
+          jobId
+        })
+      })
       const data = await response.json()
 
       // Extraer preguntas y respuestas
@@ -84,6 +88,7 @@ export default function useInterviewData() {
 
   const handleAnswerSelection = index => {
     setSelectedAnswer(index)
+    setAnswerIsSelected(true)
   }
 
   const handleSubmit = () => {
@@ -101,6 +106,7 @@ export default function useInterviewData() {
     setSelectedAnswer(null)
     setAnswerStatus(null)
     setSubmitted(false)
+    setAnswerIsSelected(false)
     fetchData() // Vuelve a cargar los datos para generar una nueva pregunta
   }
 
@@ -114,6 +120,7 @@ export default function useInterviewData() {
     explanation,
     submitted,
     loading,
+    answerIsSelected,
     handleAnswerSelection,
     handleSubmit,
     handleNewQuestion
