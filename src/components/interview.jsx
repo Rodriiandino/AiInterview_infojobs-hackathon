@@ -5,7 +5,6 @@ import { Logo } from './logo'
 export default function Interview() {
   const [interviewType, setInterviewType] = useState('')
   const [interviewer, setInterviewer] = useState('')
-  const [jobData, setJobData] = useState(null)
   const [question, setQuestion] = useState('')
   const [answers, setAnswers] = useState([])
   const [selectedAnswer, setSelectedAnswer] = useState(null)
@@ -27,25 +26,25 @@ export default function Interview() {
         const personality = assignPersonality(selectedInterviewer)
         const characteristics = assignCharacteristics(selectedInterviewType)
 
-        setInterviewType(selectedInterviewType)
+        setInterviewType(characteristics)
         setInterviewer(selectedInterviewer)
 
-        fetch('http://localhost:3001/api/job', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            interviewType: characteristics,
-            interviewer: personality,
-            jobId
-          })
-        })
+        fetch(
+          'https://aiinterviewinfojobs-hackathon-production.up.railway.app/api/job',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              interviewType: characteristics,
+              interviewer: personality,
+              jobId
+            })
+          }
+        )
           .then(response => response.json())
           .then(data => {
-            console.log(data)
-            setJobData(data)
-
             // Extraer preguntas y respuestas
             const completions = data.completions.trim()
 
@@ -111,7 +110,7 @@ export default function Interview() {
             <p className='text-center font-bold text-lg'>Cargando...</p>
           ) : null}
           <main className=''>
-            <section mb-4>
+            <section className='mb-4'>
               <h3 className='mb-2 text-primary font-bold text-lg'>
                 Tipo de Entrevista:{' '}
                 <span className='text-GrayD4 font-medium'>{interviewType}</span>{' '}

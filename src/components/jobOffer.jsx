@@ -12,7 +12,7 @@ export function JobOffer() {
     try {
       setLoading(true)
 
-      let apiUrl = `http://localhost:3001/api/infojobs?page=${page}`
+      let apiUrl = `https://aiinterviewinfojobs-hackathon-production.up.railway.app/api/infojobs?page=${page}`
       if (category) {
         apiUrl += `&category=${encodeURIComponent(category)}`
       }
